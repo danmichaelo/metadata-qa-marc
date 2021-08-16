@@ -64,14 +64,15 @@ public class Utils {
   public static MarcVersion package2version(String packageName) {
     MarcVersion version;
     switch (packageName) {
-      case "bltags":      version = MarcVersion.BL;      break;
-      case "dnbtags":     version = MarcVersion.DNB;     break;
-      case "fennicatags": version = MarcVersion.FENNICA; break;
-      case "genttags":    version = MarcVersion.GENT;    break;
-      case "oclctags":    version = MarcVersion.OCLC;    break;
-      case "sztetags":    version = MarcVersion.SZTE;    break;
-      case "nkcrtags":    version = MarcVersion.NKCR;    break;
-      default:            version = MarcVersion.MARC21;  break;
+      case "bstags":      version = MarcVersion.MARC21NO; break;
+      case "bltags":      version = MarcVersion.BL;       break;
+      case "dnbtags":     version = MarcVersion.DNB;      break;
+      case "fennicatags": version = MarcVersion.FENNICA;  break;
+      case "genttags":    version = MarcVersion.GENT;     break;
+      case "oclctags":    version = MarcVersion.OCLC;     break;
+      case "sztetags":    version = MarcVersion.SZTE;     break;
+      case "nkcrtags":    version = MarcVersion.NKCR;     break;
+      default:            version = MarcVersion.MARC21;   break;
     }
     return version;
   }
