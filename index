@@ -14,14 +14,12 @@ ME=$(basename $0)
 show_usage() { # display help massage
   cat <<EOF
 usage:
- ${ME} [-d|--db] [-p|--file-path] [-m|--file-mask] [-w|--no-delete]
+ ${ME} [-d|--db] [-w|--no-delete]
        [-s|--solrFieldType] [-x|--marcxml] [-a|--alephseq] [-t|--trimId]
        [-r|--defaultRecordType] [-v|--marcVersion]
        [-h|--help]
 
  -d, --db <name>        name of the database
- -p, --file-path <path> the directory of the input files
- -m, --file-mask <mask> file mask (e.g. *.mrc)
  -w, --no-delete        do not delete the old index
  -s, --solrFieldType <field type>: How Solr field should be named.
                         Possible values: 'marc-tags', 'human-readable', or 'mixed'
@@ -45,7 +43,7 @@ if [ $# -eq 0 ]; then
 fi
 
 GETOPT=$(getopt -o d:p:m:ws::xatr:hv:l:i: \
-  --long db:,file-path:,file-mask:,no-delete,solrFieldType:,marcxml,alephseq,trimId,defaultRecordType,help,marcVersion:,limit:,ignorableRecords: \
+  --long db:,no-delete,solrFieldType:,marcxml,alephseq,trimId,defaultRecordType,help,marcVersion:,limit:,ignorableRecords: \
   -n ${ME} -- "$@")
 eval set -- "$GETOPT"
 
@@ -58,8 +56,6 @@ DELETE=1
 while true ; do
   case "$1" in
     -d|--db) DB=$2 ; shift 2;;
-    -p|--file-path) FILE_PATH=$2 ; shift 2;;
-    -m|--file-mask) FILE_MASK=$2 ; shift 2;;
     -w|--no-delete) DELETE=0 ; shift;;
     -s|--solrFieldType) solrFieldType=$2 ; shift 2;;
     -r|--defaultRecordType) defaultRecordType=$2 ; shift 2;;
@@ -107,7 +103,7 @@ running the command
   $marcxml \
   $alephseq \
   $ignorableRecords \
-  ${FILE_PATH}/${FILE_MASK}
+  [FILES]
 ---END
 EOT
 
@@ -115,7 +111,7 @@ EOT
   --solrUrl ${SOLR_DB_URL} --solrFieldType $solrFieldType \
   --defaultRecordType $defaultRecordType \
   --marcVersion $marcVersion $limit $trimId $marcxml $alephseq $ignorableRecords \
-  ${FILE_PATH}/${FILE_MASK}
+  $@
 
 echo "Start optimizing"
 curl "$SOLR_DB_URL/update?optimize=true" -H 'Content-type: text/xml' --data-binary '<commit/>'
